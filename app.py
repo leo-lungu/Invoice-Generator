@@ -1,6 +1,8 @@
 from openpyxl import load_workbook
 from flask import Flask, request, render_template
 import datetime
+from flask import Flask, send_file
+from flask import request
 
 wb = load_workbook("Invoice.xlsx")
 
@@ -34,8 +36,13 @@ address = sheet['G12'] #G12
 date = sheet['G13'] #G13
 
 app = Flask(__name__)  
-print("aaaa")
-@app.route('/invoice', methods = ['POST', 'GET'])
+@app.route('/', methods = ['POST', 'GET'])
+def index():
+    return render_template('invoice.html')
+
+
+print("testing")
+@app.route('/submitted', methods = ['POST', 'GET'])
 def invoice():
     if request.method == 'POST':
         name.value = request.form.get("name")
@@ -69,12 +76,15 @@ def invoice():
         totalpay.value = totalhoursForm * hourlyForm
         print(request.form.get("date"))
         updatedDate = datetime.datetime.strptime(request.form.get("date"), "%Y-%m-%d").strftime("%d/%m/%Y")
-        date.value = datetime.updatedDate
-        wb.save("Invoice1.xlsx")
-        exit(0)
+        date.value = updatedDate
+        wb.save("Invoices/Invoice1.xlsx")
+    return render_template('submitted.html')
 
-    return render_template('invoice.html')
- 
+
+@app.route('/download_file')
+def download_file():
+    return send_file('Invoices/Invoice1.xlsx', as_attachment=True)
+
 if __name__ == '__main__':
     app.debug = True
     app.run()
