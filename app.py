@@ -1,5 +1,6 @@
 from openpyxl import load_workbook
 from flask import Flask, request, render_template
+import datetime
 
 wb = load_workbook("Invoice.xlsx")
 
@@ -61,14 +62,14 @@ def invoice():
         invoicenumber.value = request.form.get("invoicenumber")
 
         address.value = request.form.get("address")
-
-        date.value = request.form.get("date")
         
         totalhoursForm = mondayForm + tuesdayForm + wednesdayForm + thursdayForm + fridayForm + saturdayForm
         totalhours.value = totalhoursForm
         ordinary.value = totalhoursForm
         totalpay.value = totalhoursForm * hourlyForm
         print(request.form.get("date"))
+        updatedDate = datetime.datetime.strptime(request.form.get("date"), "%Y-%m-%d").strftime("%d/%m/%Y")
+        date.value = datetime.updatedDate
         wb.save("Invoice1.xlsx")
         exit(0)
 
