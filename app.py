@@ -77,13 +77,13 @@ def invoice():
         print(request.form.get("date"))
         updatedDate = datetime.datetime.strptime(request.form.get("date"), "%Y-%m-%d").strftime("%d/%m/%Y")
         date.value = updatedDate
-        wb.save("Invoices/Invoice1.xlsx")
+        wb.save("Invoices/Invoice.xlsx")
     return render_template('submitted.html')
 
 
 @app.route('/download_file')
 def download_file():
-    return send_file('Invoices/Invoice1.xlsx', as_attachment=True)
+    return send_file('Invoices/Invoice.xlsx', as_attachment=True)
 
 if __name__ == '__main__':
     app.debug = True
